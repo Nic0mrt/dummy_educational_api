@@ -316,8 +316,20 @@ app.post('/register', (req, res) => {
   }
 });
 
-app.get('/repertoire', (_, res) => {
-  res.json({ ok: true, data: repertoire });
+app.get('/repertoire', (req, res) => {
+  const { search } = req.query;
+  let usersToSend = [];
+  if (search) {
+    usersToSend = repertoire.filter(
+      user =>
+        user.last_name.toLowerCase().startsWith(search.toLowerCase()) ||
+        user.first_name.toLowerCase().startsWith(search.toLowerCase())
+    );
+  } else {
+    usersToSend = repertoire;
+  }
+
+  res.json({ ok: true, data: usersToSend });
 });
 
 app.get('/users', (req, res) => {
