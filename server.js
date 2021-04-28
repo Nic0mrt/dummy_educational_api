@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const shortid = require('shortid');
 
 const app = express();
 app.use(express.json());
@@ -313,6 +314,32 @@ app.post('/register', (req, res) => {
     res.json({ ok: true, data: login });
   } else {
     res.json({ ok: false, error: "cet identifiant n'es pas disponible" });
+  }
+});
+
+app.delete('/repertoire/:id', (req, res) => {
+  const { id } = req.params;
+  repertoire = repertoire.filter(user => id !== user.id);
+  res.json({ ok: true, data: repertoire });
+});
+
+app.post('/repertoire', (req, res) => {
+  try {
+    const { first_name, last_name, email, gender } = req.body;
+
+    if (first_name && last_name && email && gender) {
+      const newPerson = {
+        id: shortid.generate(),
+        first_name,
+        last_name,
+        email,
+        gender,
+      };
+      repertoire = [...repertoire, newPerson];
+      res.json({ ok: true, data: newPerson });
+    }
+  } catch (error) {
+    res.json({ ok: false, error: error.message });
   }
 });
 
