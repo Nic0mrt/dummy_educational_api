@@ -337,6 +337,8 @@ app.post('/repertoire', (req, res) => {
       };
       repertoire = [...repertoire, newPerson];
       res.json({ ok: true, data: newPerson });
+    } else {
+      throw new Error('informations manquantes');
     }
   } catch (error) {
     res.json({ ok: false, error: error.message });
